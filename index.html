@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vowel Switchout</title>
+	<style>
+		html {
+			font-family: sans-serif;
+			cursor: default;
+		}
+
+		body {
+			padding: 30px;
+		}
+
+		div {
+			font-size: 2.5rem;
+		}
+
+		label, p, div {
+		  -webkit-touch-callout: none; /* iOS Safari */
+		    -webkit-user-select: none; /* Safari */
+		       -moz-user-select: none; /* Old versions of Firefox */
+		        -ms-user-select: none; /* Internet Explorer/Edge */
+		            user-select: none; /* Non-prefixed version, currently
+		                                  supported by Chrome, Edge, Opera and Firefox */
+		}
+    </style>
+</head>
+<body>
+	<label for="theInput" onclick="switchIt(this)">Vowel Switcher</label>
+	<input type="text" id="theInput">
+	<button onclick="processIt()">Next</button>
+	<p style="display:none" id="instructions">Click on words to change their vowels</p>
+	<br/>
+
+	<div id="resultWords"></div>
+	
+	<!-- <p onclick="switchIt(this)">Benji</p> -->
+
+	<script type="text/javascript">
+
+		var lowerVowelArray = ["a","e","i","o","u"];
+		var upperVowelArray = ["A","E","I","O","U"];
+
+		function processIt() {
+			var theInput = document.querySelector('#theInput').value;
+			var arrayified = theInput.split(" ");
+			var theOutput = document.querySelector('#resultWords');
+
+			var processed = arrayified.map(word => `<span onclick="switchIt(this)">${word}</span>`);
+
+			for (let i=0; i<processed.length;i++) {
+				theOutput.innerHTML+=(processed[i]+" ");
+			}
+
+			document.querySelector('#instructions').style.display = "block";
+		}
+		
+		function switchIt(e) {
+			var word = e.innerHTML;
+			var split = word.split("");
+
+			for (let i=0; i<word.length; i++) {
+				if (lowerVowelArray.includes(split[i])) {
+					split[i] = lowerVowelArray[Math.floor(Math.random()*lowerVowelArray.length)];
+				} 
+				if (upperVowelArray.includes(split[i])) {
+					split[i] = upperVowelArray[Math.floor(Math.random()*upperVowelArray.length)];
+				} 
+			}
+
+			var newWord = split.join("");
+
+			e.innerHTML = newWord;
+		}
+
+
+	</script>
+
+</body>
+</html>
