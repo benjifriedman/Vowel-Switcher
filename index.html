@@ -10,7 +10,7 @@
 		}
 
 		body {
-			padding: 30px;
+			padding: 0 30px;
 		}
 
 		div {
@@ -28,13 +28,18 @@
     </style>
 </head>
 <body>
-	<label for="theInput" onclick="switchIt(this)">Vowel Switcher</label>
+	<p onclick="switchIt(this)">Vowel Switcher</p>
+	<label for="theInput" onclick="switchIt(this)">Enter some text: </label>
 	<input type="text" id="theInput">
 	<button onclick="processIt()">Next</button>
 	<p style="display:none" id="instructions">Click on words to change their vowels</p>
 	<br/>
 
 	<div id="resultWords"></div>
+
+	<br/><br/>
+	<button onclick="copyText()" style="display:none" id="copyButton">Copy text</button>
+
 	
 	<!-- <p onclick="switchIt(this)">Benji</p> -->
 
@@ -55,6 +60,7 @@
 			}
 
 			document.querySelector('#instructions').style.display = "block";
+			document.querySelector('#copyButton').style.display = "block";
 		}
 		
 		function switchIt(e) {
@@ -73,6 +79,12 @@
 			var newWord = split.join("");
 
 			e.innerHTML = newWord;
+		}
+
+		function copyText() {
+		  var copyText = document.getElementById("resultWords").textContent;
+		  var stringifiedText = String(copyText);
+		  navigator.clipboard.writeText(stringifiedText);
 		}
 
 
