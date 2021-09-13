@@ -55,6 +55,14 @@
 			var arrayified = theInput.split(" ");
 			var theOutput = document.querySelector('#resultWords');
 
+			if (theInput != "") {
+				theInput = "";
+			}
+
+			while (theOutput.lastElementChild) {
+    			theOutput.removeChild(theOutput.lastElementChild);
+  			}
+
 			var processed = arrayified.map(word => `<span onclick="switchIt(this)">${word}</span>`);
 
 			for (let i=0; i<processed.length;i++) {
