@@ -1,104 +1,109 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>Vowel Switcher</title>
-	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<style>
-		html {
-			font-family: sans-serif;
-			cursor: default;
-		}
+	<head>
+		<meta charset="utf-8" />
+		<title>Vowel Switcher</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<style>
+			html {
+				font-family: sans-serif;
+				cursor: default;
+			}
 
-		body {
-			padding: 0 30px;
-		}
+			body {
+				padding: 0 30px;
+			}
 
-		div {
-			font-size: 2.5rem;
-		}
+			div {
+				font-size: 2.5rem;
+			}
 
-		label, p, div {
-		  -webkit-touch-callout: none; /* iOS Safari */
-		    -webkit-user-select: none; /* Safari */
-		       -moz-user-select: none; /* Old versions of Firefox */
-		        -ms-user-select: none; /* Internet Explorer/Edge */
-		            user-select: none; /* Non-prefixed version, currently
+			label,
+			p,
+			div {
+				-webkit-touch-callout: none; /* iOS Safari */
+				-webkit-user-select: none; /* Safari */
+				-moz-user-select: none; /* Old versions of Firefox */
+				-ms-user-select: none; /* Internet Explorer/Edge */
+				user-select: none; /* Non-prefixed version, currently
 		                                  supported by Chrome, Edge, Opera and Firefox */
-		}
-    </style>
-</head>
-<body>
-	<p onclick="switchIt(this)">Vowel Switcher</p>
-	<label for="theInput" onclick="switchIt(this)">Enter some text: </label>
-	<input type="text" id="theInput">
-	<button onclick="processIt()">Next</button>
-	<p style="display:none" id="instructions" onclick="switchIt(this)">Click on words to change their vowels</p>
-	<br/>
+			}
+		</style>
+	</head>
+	<body>
+		<p onclick="switchIt(this)">Vowel Switcher</p>
+		<label for="theInput" onclick="switchIt(this)">Enter some text: </label>
+		<input type="text" id="theInput" />
+		<button onclick="processIt()">Next</button>
+		<p style="display: none" id="instructions" onclick="switchIt(this)">Click on words to change their vowels</p>
+		<br />
 
-	<div id="resultWords"></div>
+		<div id="resultWords"></div>
 
-	<br/><br/>
-	<button onclick="copyText()" style="display:none" id="copyButton">Copy text</button>
+		<br /><br />
+		<div style="display: flex; gap: 10px">
+			<button onclick="copyText()" style="display: none" id="copyButton">Copy text</button>
+			<button onclick="switchAll()" style="display: none" id="switchAllButton">Switch All</button>
+		</div>
+		<!-- <p onclick="switchIt(this)">Benji</p> -->
 
-	
-	<!-- <p onclick="switchIt(this)">Benji</p> -->
+		<script type="text/javascript">
+			var lowerVowelArray = ['a', 'e', 'i', 'o', 'u'];
+			var upperVowelArray = ['A', 'E', 'I', 'O', 'U'];
 
-	<script type="text/javascript">
+			function processIt() {
+				var theInput = document.querySelector('#theInput').value;
+				var arrayified = theInput.split(' ');
+				var theOutput = document.querySelector('#resultWords');
 
-		var lowerVowelArray = ["a","e","i","o","u"];
-		var upperVowelArray = ["A","E","I","O","U"];
+				if (theInput != '') {
+					theInput = '';
+				}
 
-		function processIt() {
-			var theInput = document.querySelector('#theInput').value;
-			var arrayified = theInput.split(" ");
-			var theOutput = document.querySelector('#resultWords');
+				while (theOutput.lastElementChild) {
+					theOutput.removeChild(theOutput.lastElementChild);
+				}
 
-			if (theInput != "") {
-				theInput = "";
+				var processed = arrayified.map(word => `<span onclick="switchIt(this)">${word}</span>`);
+
+				for (let i = 0; i < processed.length; i++) {
+					theOutput.innerHTML += processed[i] + ' ';
+				}
+
+				document.querySelector('#instructions').style.display = 'block';
+				document.querySelector('#copyButton').style.display = 'block';
+				document.querySelector('#switchAllButton').style.display = 'block';
 			}
 
-			while (theOutput.lastElementChild) {
-    			theOutput.removeChild(theOutput.lastElementChild);
-  			}
+			function switchIt(e) {
+				var word = e.innerHTML;
+				var split = word.split('');
 
-			var processed = arrayified.map(word => `<span onclick="switchIt(this)">${word}</span>`);
+				for (let i = 0; i < word.length; i++) {
+					if (lowerVowelArray.includes(split[i])) {
+						split[i] = lowerVowelArray[Math.floor(Math.random() * lowerVowelArray.length)];
+					}
+					if (upperVowelArray.includes(split[i])) {
+						split[i] = upperVowelArray[Math.floor(Math.random() * upperVowelArray.length)];
+					}
+				}
 
-			for (let i=0; i<processed.length;i++) {
-				theOutput.innerHTML+=(processed[i]+" ");
+				var newWord = split.join('');
+
+				e.innerHTML = newWord;
 			}
 
-			document.querySelector('#instructions').style.display = "block";
-			document.querySelector('#copyButton').style.display = "block";
-		}
-		
-		function switchIt(e) {
-			var word = e.innerHTML;
-			var split = word.split("");
-
-			for (let i=0; i<word.length; i++) {
-				if (lowerVowelArray.includes(split[i])) {
-					split[i] = lowerVowelArray[Math.floor(Math.random()*lowerVowelArray.length)];
-				} 
-				if (upperVowelArray.includes(split[i])) {
-					split[i] = upperVowelArray[Math.floor(Math.random()*upperVowelArray.length)];
-				} 
+			function copyText() {
+				var copyText = document.getElementById('resultWords').textContent;
+				var stringifiedText = String(copyText);
+				navigator.clipboard.writeText(stringifiedText);
 			}
 
-			var newWord = split.join("");
-
-			e.innerHTML = newWord;
-		}
-
-		function copyText() {
-		  var copyText = document.getElementById("resultWords").textContent;
-		  var stringifiedText = String(copyText);
-		  navigator.clipboard.writeText(stringifiedText);
-		}
-
-
-	</script>
-
-</body>
+			function switchAll() {
+				const words = document.querySelectorAll('#resultWords span');
+				words.forEach(word => switchIt(word));
+			}
+		</script>
+	</body>
 </html>
